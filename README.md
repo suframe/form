@@ -139,8 +139,7 @@ class Fields
 }
 ```
 
-<img style="width:100%" src="https://t1.picb.cc/uploads/2019/10/07/gLIfR1.jpg" />
-
+![gLIfR1.jpg][1]
 
 ## 文档
 主要文档参考form-create的文档
@@ -170,3 +169,5 @@ suframe遵循Apache2开源协议发布，并提供免费使用。
 版权所有Copyright © 2019- by qian <330576744@qq.com>
 
 All rights reserved。
+
+  [1]: https://t1.picb.cc/uploads/2019/10/07/gLIfR1.jpg
