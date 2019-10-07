@@ -1,5 +1,5 @@
 <?php
-
+namespace suframe\form;
 use FormBuilder\Exception\FormBuilderException;
 use FormBuilder\Factory\Elm;
 use FormBuilder\Factory\Iview;
