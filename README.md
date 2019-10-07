@@ -7,6 +7,9 @@ suframe 创建vue表单，基于https://github.com/xaboy/form-create再次封装
 
 后期会基于tp6控制台，通过数据库表字段自动生成次文件，加速开发，一行命令生成表单。
 
+## 预览
+
+![sample110.jpg][2]
 
 ## 环境需求
 * PHP >= 7.2
@@ -171,3 +174,4 @@ suframe遵循Apache2开源协议发布，并提供免费使用。
 All rights reserved。
 
   [1]: https://raw.githubusercontent.com/suframe/form/master/demo/demo.jpg
+  [2]: https://raw.githubusercontent.com/xaboy/form-create/dev/images/sample110.jpg
