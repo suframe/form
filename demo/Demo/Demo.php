@@ -1,6 +1,6 @@
 <?php
-
-class Fields
+namespace demo;
+class Demo
 {
 
     public function title()
@@ -12,15 +12,32 @@ class Fields
             'col' => ['span' => 12],
             'props' => [
                 'placeholder' => '请输入名称',
-                'disabled' => true,
             ],
             'validate' => [
-                ['required' => true]
+                ['required' => true, 'message' => '不能为空']
             ],
             'callback' => function($element){
                 $element->value(99999);
                 return $element;
             }
+        ];
+    }
+
+    public function number()
+    {
+        return [
+            'type' => 'number',
+            'title' => '数值',
+            'field' => 'number',
+            'col' => ['span' => 12],
+            'props' => [
+                'placeholder' => '请输入数值',
+            ],
+            'validate' => [
+                ['required' => true],
+                ['min' => 999, 'message' => '最小999'],
+                ['max' => 9999],
+            ]
         ];
     }
 

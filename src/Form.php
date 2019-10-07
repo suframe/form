@@ -93,7 +93,7 @@ class Form
     public function setRuleByClass($class)
     {
         $obj = new $class;
-        $ref = new ReflectionClass($obj);
+        $ref = new \ReflectionClass($obj);
         foreach ($ref->getMethods() as $method) {
             if (!$method->isPublic()) {
                 continue;
@@ -163,8 +163,8 @@ class Form
                     $validate->range(...$item['range']);
                 }
                 foreach ($validateRules as $validateRule) {
-                    if (isset($item[$validate])) {
-                        $validate->$validate($item[$validate]);
+                    if (isset($item[$validateRule])) {
+                        $validate->$validateRule($item[$validateRule]);
                     }
                 }
                 if (isset($item['message'])) {
