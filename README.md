@@ -139,7 +139,7 @@ class Fields
 }
 ```
 
-![gLIfR1.jpg][1]
+![demo.jpg][1]
 
 ## 文档
 主要文档参考form-create的文档
@@ -170,4 +170,4 @@ suframe遵循Apache2开源协议发布，并提供免费使用。
 
 All rights reserved。
 
-  [1]: https://t1.picb.cc/uploads/2019/10/07/gLIfR1.jpg
+  [1]: https://raw.githubusercontent.com/suframe/form/master/demo/demo.jpg
