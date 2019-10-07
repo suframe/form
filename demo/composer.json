@@ -1,0 +1,16 @@
+{
+    "name": "suframe/formDemo",
+    "description": "suframe form demo",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "qian",
+            "email": "330576744@qq.com"
+        }
+    ],
+	"minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "suframe/form": "dev-master@dev"
+    }
+}
