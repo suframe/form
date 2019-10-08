@@ -17,7 +17,8 @@ class Demo
                 ['required' => true, 'message' => '不能为空']
             ],
             'callback' => function($element){
-                $element->value(99999);
+                $element->clearable(true);
+                $element->prefixIcon('el-icon-s-goods');
                 return $element;
             }
         ];
@@ -47,7 +48,7 @@ class Demo
             'type' => 'radio',
             'title' => '有效',
             'field' => 'enable',
-            'col' => ['span' => 12],
+            'col' => ['span' => 6],
             'props' => [],
             'validate' => [],
             'options' => [
@@ -63,6 +64,7 @@ class Demo
             'type' => 'switch',
             'title' => '是否上架',
             'field' => 'open',
+            'col' => ['span' => 6],
             'props' => [
                 'activeValue' => "1",
                 'inactiveValue' => "0",
@@ -74,7 +76,7 @@ class Demo
     {
         return [
             'type' => 'city',
-            'col' => ['span' => 12],
+            'col' => ['span' => 6],
             'title' => '所在区域',
             'field' => 'city',
             'options' => [
