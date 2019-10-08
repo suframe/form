@@ -51,7 +51,7 @@ class Demo
             'props' => [],
             'validate' => [],
             'options' => [
-                ['value' => "0", 'label' => "不包邮", 'disabled' => false],
+                ['value' => "2", 'label' => "不包邮", 'disabled' => false],
                 ['value' => "1", 'label' => "包邮", 'disabled' => true],
             ],
         ];
@@ -70,13 +70,17 @@ class Demo
         ];
     }
 
-    public function cascader()
+    public function city()
     {
         return [
-            'type' => 'switch',
+            'type' => 'city',
             'col' => ['span' => 12],
             'title' => '所在区域',
-            'field' => 'cascader',
+            'field' => 'city',
+            'options' => [
+                ['value' => "2", 'label' => "不包邮", 'disabled' => false],
+                ['value' => "1", 'label' => "包邮", 'disabled' => true],
+            ],
         ];
     }
 
@@ -84,7 +88,7 @@ class Demo
     {
         return [
             'type' => 'DatePicker',
-            'title' => '所在区域',
+            'title' => '时间选择',
             'field' => 'date',
             'props' => [
                 'type' => "datetimerange",
