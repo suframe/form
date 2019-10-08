@@ -46,6 +46,16 @@ suframe 创建vue表单，基于https://github.com/xaboy/form-create再次封装
 * tree
 * frame
 
+
+## 快速测试
+```
+git clone https://github.com/suframe/form
+cd form/demo
+composer install
+php -S 0.0.0.0:9000 index.php
+```
+访问http://127.0.0.1:9000 即可
+
 ## 安装
 
 ~~~
