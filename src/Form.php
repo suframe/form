@@ -122,7 +122,11 @@ class Form
         $type = $config['type'] ?? 'input';
         $type = $this->typeMap($type);
         /** @var  $element */
-        $element = Elm::$type($config['field'], $config['title'] ?? $config['field']);
+        if(strpos($type, 'upload') === 0) {
+            $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['action'] ?? '');
+        } else {
+            $element = Elm::$type($config['field'], $config['title'] ?? $config['field']);
+        }
         if (isset($config['callback'])) {
             $element = $config['callback']($element);
         }
