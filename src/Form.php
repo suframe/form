@@ -124,6 +124,8 @@ class Form
         /** @var  $element */
         if(strpos($type, 'upload') === 0) {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['action'] ?? '');
+        } elseif($type === 'number') {
+            $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value'] ?? 0);
         } else {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field']);
         }
