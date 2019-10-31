@@ -90,7 +90,15 @@ class Form
         return $this;
     }
 
-    public function setRuleByClass($class)
+    /**
+     * @param $class
+     * @param array $exclude
+     * @param array $include
+     * @return $this
+     * @throws FormBuilderException
+     * @throws \ReflectionException
+     */
+    public function setRuleByClass($class, $exclude = [], $include = [])
     {
         $obj = new $class;
         $ref = new \ReflectionClass($obj);
@@ -98,8 +106,15 @@ class Form
             if (!$method->isPublic()) {
                 continue;
             }
-            $method = lcfirst($method->getName());
-            $config = $obj->$method();
+            $methodName = $method->getName();
+            if($exclude && in_array($methodName, $exclude)){
+                continue;
+            }
+            if($include && !in_array($methodName, $include)){
+                continue;
+            }
+            $methodName = lcfirst($methodName);
+            $config = $obj->$methodName();
             if (!$config) {
                 continue;
             }
