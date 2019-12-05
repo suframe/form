@@ -59,7 +59,7 @@ class Form
     {
         $html = '';
         foreach ($this->customComponents as $customComponent) {
-            $file = __DIR__ . '/templates/' . $customComponent . 'html';
+            $file = __DIR__ . '/templates/' . $customComponent . '.js';
             if(!file_exists($file)){
                 return false;
             }
@@ -87,6 +87,13 @@ class Form
         }
         $this->f->setRule($newRule);
         return $this;
+    }
+
+    public function view()
+    {
+        $rs = $this->customComponentView();
+        $rs .= $this->f->view();
+        return $rs;
     }
 
     /**
