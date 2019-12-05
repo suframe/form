@@ -53,6 +53,22 @@ class Form
         return call_user_func_array([$this->f, $name], $arguments);
     }
 
+    protected $customComponents = [];
+
+    public function customComponentView()
+    {
+        $html = '';
+        foreach ($this->customComponents as $customComponent) {
+            $file = __DIR__ . '/templates/' . $customComponent . 'html';
+            if(!file_exists($file)){
+                return false;
+            }
+            $tmp = include $file;
+            $html .= "\n" . $tmp;
+        }
+        return $html;
+    }
+
     /**
      * @param array $rule
      * @return \FormBuilder\Form
@@ -144,6 +160,7 @@ class Form
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value'] ?? 0);
         } elseif ($type === 'sku') {
             $type = 'sku';
+            $this->customComponents[$type] = $type;
             $element = new CustomComponent($type);
             $element->field($config['field']);
             $element->prop('title', $config['title'] ?? '规格设置');
