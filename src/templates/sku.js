@@ -392,26 +392,6 @@ Vue.component('sku', {
         </section>
     </el-card>
 
-    <el-card class="box-card">
-        <div slot="header" class="clearfix">
-            <span>规格展示</span>
-            <el-button style="float: right; padding: 3px 0" type="text"
-                       @click="specificationStatus = !specificationStatus">{{ !specificationStatus ? '显示' : '隐藏' }}
-            </el-button>
-        </div>
-        <section v-if="specificationStatus">
-            <el-row>
-                <el-col :span="2" v-for="(item, index) in sku.specification" :key="index" class="text item bold">{{item.name }}
-                </el-col>
-            </el-row>
-            <el-row v-for="(item, index) in countSum(0)" :key="index">
-                <el-col :span="2" class="text item" v-for="(n, specIndex) in sku.specification.length" :key="n">
-                    {{getSpecAttr(specIndex, index)}}
-                </el-col>
-            </el-row>
-        </section>
-    </el-card>
-
     <el-card>
         <div slot="header" class="clearfix">
             <span>规格表格</span>
@@ -506,6 +486,26 @@ Vue.component('sku', {
             </tbody>
 
         </table>
+    </el-card>
+
+    <el-card class="box-card">
+        <div slot="header" class="clearfix">
+            <span>规格展示</span>
+            <el-button style="float: right; padding: 3px 0" type="text"
+                       @click="specificationStatus = !specificationStatus">{{ !specificationStatus ? '显示' : '隐藏' }}
+            </el-button>
+        </div>
+        <section v-if="specificationStatus">
+            <el-row>
+                <el-col :span="2" v-for="(item, index) in sku.specification" :key="index" class="text item bold">{{item.name }}
+                </el-col>
+            </el-row>
+            <el-row v-for="(item, index) in countSum(0)" :key="index">
+                <el-col :span="2" class="text item" v-for="(n, specIndex) in sku.specification.length" :key="n">
+                    {{getSpecAttr(specIndex, index)}}
+                </el-col>
+            </el-row>
+        </section>
     </el-card>
 
 </div>
