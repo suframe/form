@@ -401,11 +401,11 @@ Vue.component('sku', {
         </div>
         <section v-if="specificationStatus">
             <el-row>
-                <el-col :span="2" v-for="(item, index) in specification" :key="index" class="text item bold">{{item.name }}
+                <el-col :span="2" v-for="(item, index) in sku.specification" :key="index" class="text item bold">{{item.name }}
                 </el-col>
             </el-row>
             <el-row v-for="(item, index) in countSum(0)" :key="index">
-                <el-col :span="2" class="text item" v-for="(n, specIndex) in specification.length" :key="n">
+                <el-col :span="2" class="text item" v-for="(n, specIndex) in sku.specification.length" :key="n">
                     {{getSpecAttr(specIndex, index)}}
                 </el-col>
             </el-row>
