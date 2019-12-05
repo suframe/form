@@ -140,7 +140,9 @@ class Form
         /** @var  $element */
         if(strpos($type, 'upload') === 0) {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['action'] ?? '');
-        } elseif($type === 'sku') {
+        } elseif ($type === 'number') {
+            $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value'] ?? 0);
+        } elseif ($type === 'sku') {
             $type = 'sku';
             $element = new CustomComponent($type);
             $element->field($config['field']);
