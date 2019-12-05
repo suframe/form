@@ -1,5 +1,6 @@
 <?php
 namespace suframe\form;
+use FormBuilder\Driver\CustomComponent;
 use FormBuilder\Exception\FormBuilderException;
 use FormBuilder\Factory\Elm;
 use FormBuilder\Factory\Iview;
@@ -139,6 +140,11 @@ class Form
         /** @var  $element */
         if(strpos($type, 'upload') === 0) {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['action'] ?? '');
+        } elseif($type === 'sku') {
+            $type = 'sku';
+            $element = new CustomComponent($type);
+            $element->field($config['field']);
+            $element->prop('title', $config['title'] ?? '规格设置');
         } else {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field']);
         }
