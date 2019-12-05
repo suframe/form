@@ -43,13 +43,13 @@ Vue.component('sku', {
             isSetListShow: true, // 批量设置相关
             batchValue: '', // 批量设置所绑定的值
             currentType: '', // 要批量设置的类型
+            // 用来存储要添加的规格属性
+            addValues: [],
             sku: {
                 // 规格
                 specification: [],
                 // 子规格
-                childProductArray: [],
-                // 用来存储要添加的规格属性
-                addValues: [],
+                childProductArray: []
             }
         }
     },
@@ -81,7 +81,7 @@ Vue.component('sku', {
                 _this.addSpec()
                 // 数据
                 _this.sku.specification[i].name = item.name
-                _this.sku.addValues[i] = item.value
+                _this.addValues[i] = item.value
                 // 缓存按钮键值
                 _this.cacheSpecification[i].status = false
                 _this.cacheSpecification[i].name = item.name
@@ -145,7 +145,7 @@ Vue.component('sku', {
         },
 // 添加规格属性
         addSpecTag: function (index) {
-            let str = this.sku.addValues[index] || ''
+            let str = this.addValues[index] || ''
             if (!str.trim() || !this.cacheSpecification[index].name.trim()) {
                 this.$message.error('名称不能为空，请注意修改')
                 return
@@ -167,7 +167,7 @@ Vue.component('sku', {
         },
 // 清空 addValues
         clearAddValues: function (index) {
-            this.$set(this.sku.addValues, index, '')
+            this.$set(this.addValues, index, '')
         },
         /*
         根据传入的属性值，拿到相应规格的属性
@@ -378,7 +378,7 @@ Vue.component('sku', {
                 <el-tag v-for="(tag, j) in item.value" :key="j" closable @close="delSpecTag(index, j)">{{ tag
                     }}
                 </el-tag>
-                <el-input size="small" style="width:200px;" v-model="sku.addValues[index]" placeholder="多个产品属性以空格隔开"
+                <el-input size="small" style="width:200px;" v-model="addValues[index]" placeholder="多个产品属性以空格隔开"
                           @keyup.native.enter="addSpecTag(index)">
                     <el-button slot="append" icon="el-icon-check" type="primary"
                                @click="addSpecTag(index)"></el-button>
