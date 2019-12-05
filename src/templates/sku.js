@@ -39,7 +39,6 @@ Vue.component('sku', {
     ],
     data: function () {
         return {
-            specificationStatus: false, // 显示规格列表
             cacheSpecification: [], // 缓存规格名称
             isSetListShow: true, // 批量设置相关
             batchValue: '', // 批量设置所绑定的值
@@ -65,7 +64,7 @@ Vue.component('sku', {
         }
     },
     created: function () {
-        if(!this.defaultProductNo){
+        if (!this.defaultProductNo) {
             this.defaultProductNo = 'PRODUCTNO_';
         }
         this.createData()
@@ -73,7 +72,7 @@ Vue.component('sku', {
     methods: {
         // 创建模拟数据
         createData: function () {
-            if(!this.specs) {
+            if (!this.specs) {
                 return false
             }
             let _this = this
@@ -360,6 +359,9 @@ Vue.component('sku', {
     <el-card class="box-card">
         <div slot="header" class="clearfix">
             <span>{{title ? title : '规格设置'}}</span>
+           <el-button size="small" type="primary" :disabled="sku.specification.length >= 5" @click="addSpec">
+                添加规格项目
+            </el-button>
         </div>
         <section>
             <div v-for="(item, index) in sku.specification" :key="index" class="spec-line">
@@ -384,11 +386,6 @@ Vue.component('sku', {
                 <i class="icon el-icon-circle-close spec-deleted" @click="delSpec(index)"></i>
                 <el-divider></el-divider>
             </div>
-            <div class="add-spec">
-                <el-button size="small" type="primary" :disabled="sku.specification.length >= 5" @click="addSpec">
-                    添加规格项目
-                </el-button>
-            </div>
         </section>
     </el-card>
 
@@ -396,7 +393,7 @@ Vue.component('sku', {
         <div slot="header" class="clearfix">
             <span>规格表格</span>
         </div>
-        <table class="el-table" cellspacing="0" cellpadding="0">
+        <table class="el-table vue-sku-table" cellspacing="0" cellpadding="0">
             <thead>
             <tr>
                 <th
@@ -486,26 +483,6 @@ Vue.component('sku', {
             </tbody>
 
         </table>
-    </el-card>
-
-    <el-card class="box-card">
-        <div slot="header" class="clearfix">
-            <span>规格展示</span>
-            <el-button style="float: right; padding: 3px 0" type="text"
-                       @click="specificationStatus = !specificationStatus">{{ !specificationStatus ? '显示' : '隐藏' }}
-            </el-button>
-        </div>
-        <section v-if="specificationStatus">
-            <el-row>
-                <el-col :span="2" v-for="(item, index) in sku.specification" :key="index" class="text item bold">{{item.name }}
-                </el-col>
-            </el-row>
-            <el-row v-for="(item, index) in countSum(0)" :key="index">
-                <el-col :span="2" class="text item" v-for="(n, specIndex) in sku.specification.length" :key="n">
-                    {{getSpecAttr(specIndex, index)}}
-                </el-col>
-            </el-row>
-        </section>
     </el-card>
 
 </div>
