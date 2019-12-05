@@ -84,7 +84,7 @@ Vue.component('sku', {
                 _this.sku.addValues[i] = item.value
                 // 缓存按钮键值
                 _this.cacheSpecification[i].status = false
-                _this.cacheSpecification[i].name = item.value
+                _this.cacheSpecification[i].name = item.name
                 // 构建
                 _this.addSpecTag(i)
             })
