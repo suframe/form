@@ -34,25 +34,23 @@ Vue.component('sku', {
     props: [
         'title',
         'value',
-        'specs'
+        'specs',
+        'defaultProductNo',// 默认商品编号
     ],
     data: function () {
         return {
+            specificationStatus: false, // 显示规格列表
+            cacheSpecification: [], // 缓存规格名称
+            isSetListShow: true, // 批量设置相关
+            batchValue: '', // 批量设置所绑定的值
+            currentType: '', // 要批量设置的类型
             sku: {
-                specificationStatus: false, // 显示规格列表
-// 规格
+                // 规格
                 specification: [],
-// 子规格
+                // 子规格
                 childProductArray: [],
-// 用来存储要添加的规格属性
+                // 用来存储要添加的规格属性
                 addValues: [],
-// 默认商品编号
-                defaultProductNo: 'PRODUCTNO_',
-// 批量设置相关
-                isSetListShow: true,
-                batchValue: '', // 批量设置所绑定的值
-                currentType: '', // 要批量设置的类型
-                cacheSpecification: [] // 缓存规格名称
             }
         }
     },
@@ -67,6 +65,9 @@ Vue.component('sku', {
         }
     },
     created: function () {
+        if(!this.defaultProductNo){
+            this.defaultProductNo = 'PRODUCTNO_';
+        }
         this.createData()
     },
     methods: {
@@ -78,49 +79,49 @@ Vue.component('sku', {
             let _this = this
             this.specs.map(function (item, i) {
                 // 添加数据
-                this.addSpec()
+                _this.addSpec()
                 // 数据
-                this.sku.specification[i].name = item.name
-                this.sku.addValues[i] = item.value
+                _this.sku.specification[i].name = item.name
+                _this.sku.addValues[i] = item.value
                 // 缓存按钮键值
-                this.sku.cacheSpecification[i].status = false
-                this.sku.cacheSpecification[i].name = item.value
+                _this.cacheSpecification[i].status = false
+                _this.cacheSpecification[i].name = item.value
                 // 构建
-                this.addSpecTag(i)
+                _this.addSpecTag(i)
             })
         },
         // 添加规格项目
         addSpec: function () {
-                this.sku.cacheSpecification.push({
-                    status: true,
-                    name: ''
-                })
-                this.sku.specification.push({
-                    name: '',
-                    value: []
-                })
+            this.cacheSpecification.push({
+                status: true,
+                name: ''
+            })
+            this.sku.specification.push({
+                name: '',
+                value: []
+            })
         },
 // 修改状态
         updateSpec: function (index) {
-            this.sku.cacheSpecification[index].status = true
-            this.sku.cacheSpecification[index].name = this.sku.specification[index].name
+            this.cacheSpecification[index].status = true
+            this.cacheSpecification[index].name = this.sku.specification[index].name
         },
 // 保存规格名
         saveSpec: function (index) {
-            if (!this.sku.cacheSpecification[index].name.trim()) {
+            if (!this.cacheSpecification[index].name.trim()) {
                 this.$message.error('名称不能为空，请注意修改')
                 return
             }
 // 保存需要验证名称是否重复
-            if (this.sku.specification[index].name === this.sku.cacheSpecification[index].name) {
-                this.sku.cacheSpecification[index].status = false
+            if (this.sku.specification[index].name === this.cacheSpecification[index].name) {
+                this.cacheSpecification[index].status = false
             } else {
                 if (this.verifyRepeat(index)) {
 // 如果有重复的，禁止修改
                     this.$message.error('名称重复，请注意修改')
                 } else {
-                    this.sku.specification[index].name = this.sku.cacheSpecification[index].name
-                    this.sku.cacheSpecification[index].status = false
+                    this.sku.specification[index].name = this.cacheSpecification[index].name
+                    this.cacheSpecification[index].status = false
                 }
             }
         },
@@ -136,7 +137,7 @@ Vue.component('sku', {
 // 检查除了当前选项以外的值是否和新的值想等，如果相等，则禁止修改
                 if (index !== j
                 ) {
-                    if (_this.sku.specification[j].name === _this.sku.cacheSpecification[index].name) {
+                    if (_this.sku.specification[j].name === _this.cacheSpecification[index].name) {
                         flag = true
                     }
                 }
@@ -146,7 +147,7 @@ Vue.component('sku', {
 // 添加规格属性
         addSpecTag: function (index) {
             let str = this.sku.addValues[index] || ''
-            if (!str.trim() || !this.sku.cacheSpecification[index].name.trim()) {
+            if (!str.trim() || !this.cacheSpecification[index].name.trim()) {
                 this.$message.error('名称不能为空，请注意修改')
                 return
             } // 判空
@@ -157,8 +158,8 @@ Vue.component('sku', {
             this.$set(this.sku.specification[index], 'value', newArr)
             this.clearAddValues(index)
             this.handleSpecChange('add')
-            this.sku.specification[index].name = this.sku.cacheSpecification[index].name
-            this.sku.cacheSpecification[index].status = false
+            this.sku.specification[index].name = this.cacheSpecification[index].name
+            this.cacheSpecification[index].status = false
         },
 // 删除规格属性
         delSpecTag: function (index, num) {
@@ -242,7 +243,7 @@ Vue.component('sku', {
             let childProduct = {
                 childProductId: 0,
                 childProductSpec: this.getChildProductSpec(index),
-                childProductNo: this.sku.defaultProductNo + index,
+                childProductNo: this.defaultProductNo + index,
                 childProductStock: 0,
                 childProductPrice: 0,
                 childProductCost: 0,
@@ -312,7 +313,7 @@ Vue.component('sku', {
             let i = index
             let isRepet = true
             while (isRepet) {
-                No = this.sku.defaultProductNo + i
+                No = this.defaultProductNo + i
                 isRepet = this.isProductNoRepet(No)
                 i++
             }
@@ -327,12 +328,12 @@ Vue.component('sku', {
         },
 // 打开设置框
         openBatch: function (type) {
-            this.sku.currentType = type
-            this.sku.isSetListShow = false
+            this.currentType = type
+            this.isSetListShow = false
         },
 // 批量设置
         setBatch: function () {
-            if (typeof this.sku.batchValue === 'string') {
+            if (typeof this.batchValue === 'string') {
                 this.$message({
                     type: 'warning',
                     message: '请输入正确的值'
@@ -342,16 +343,16 @@ Vue.component('sku', {
             let _this = this
             this.sku.childProductArray.forEach(function (item) {
                 if (item.isUse) {
-                    item[_this.sku.currentType] = _this.sku.batchValue
+                    item[_this.currentType] = _this.batchValue
                 }
             })
             this.cancelBatch()
         },
 // 取消批量设置
         cancelBatch: function () {
-            this.sku.batchValue = ''
-            this.sku.currentType = ''
-            this.sku.isSetListShow = true
+            this.batchValue = ''
+            this.currentType = ''
+            this.isSetListShow = true
         }
     },
     template: `
@@ -362,14 +363,14 @@ Vue.component('sku', {
         </div>
         <section>
             <div v-for="(item, index) in sku.specification" :key="index" class="spec-line">
-                <span v-if="!sku.cacheSpecification[index].status">{{ item.name }}</span>
-                <el-input size="small" style="width:200px;" v-if="sku.cacheSpecification[index].status"
-                          v-model="sku.cacheSpecification[index].name" placeholder="输入产品规格"
+                <span v-if="!cacheSpecification[index].status">{{ item.name }}</span>
+                <el-input size="small" style="width:200px;" v-if="cacheSpecification[index].status"
+                          v-model="cacheSpecification[index].name" placeholder="输入产品规格"
                           @keyup.native.enter="saveSpec(index)">
                     <el-button slot="append" icon="el-icon-check" type="primary"
                                @click="saveSpec(index)"></el-button>
                 </el-input>
-                <i class="icon el-icon-edit" v-if="!sku.cacheSpecification[index].status"
+                <i class="icon el-icon-edit" v-if="!cacheSpecification[index].status"
                    @click="updateSpec(index)"></i>
                 ：
                 <el-tag v-for="(tag, j) in item.value" :key="j" closable @close="delSpecTag(index, j)">{{ tag
@@ -395,10 +396,10 @@ Vue.component('sku', {
         <div slot="header" class="clearfix">
             <span>规格展示</span>
             <el-button style="float: right; padding: 3px 0" type="text"
-                       @click="sku.specificationStatus = !sku.specificationStatus">{{ !sku.specificationStatus ? '显示' : '隐藏' }}
+                       @click="specificationStatus = !specificationStatus">{{ !specificationStatus ? '显示' : '隐藏' }}
             </el-button>
         </div>
-        <section v-if="sku.specificationStatus">
+        <section v-if="specificationStatus">
             <el-row>
                 <el-col :span="2" v-for="(item, index) in specification" :key="index" class="text item bold">{{item.name }}
                 </el-col>
@@ -487,13 +488,13 @@ Vue.component('sku', {
             <tr>
                 <td colspan="8" class="wh-foot">
                     <span class="label">批量设置：</span>
-                    <template v-if="sku.isSetListShow">
+                    <template v-if="isSetListShow">
                         <el-button @click="openBatch('childProductCost')" size="mini">成本价</el-button>
                         <el-button @click="openBatch('childProductStock')" size="mini">库存</el-button>
                         <el-button @click="openBatch('childProductPrice')" size="mini">销售价</el-button>
                     </template>
                     <template v-else>
-                        <el-input size="mini" style="width:200px;" v-model.number="sku.batchValue"
+                        <el-input size="mini" style="width:200px;" v-model.number="batchValue"
                                   placeholder="输入要设置的数量"></el-input>
                         <el-button type="primary" size="mini" @click="setBatch"><i
                                 class="set-btn blue el-icon-check"></i></el-button>
@@ -507,17 +508,6 @@ Vue.component('sku', {
         </table>
     </el-card>
 
-    <el-card class="box-card">
-        <div slot="header" class="clearfix">
-            <span>数据格式</span>
-        </div>
-        <section>
-            <div v-for="(item, index) in sku.childProductArray" :key="index">
-                {{ item }}
-                <el-divider></el-divider>
-            </div>
-        </section>
-    </el-card>
 </div>
 `
 })
