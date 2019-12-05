@@ -171,6 +171,7 @@ class Form
             $element = new CustomComponent($type);
             $element->field($config['field']);
             $element->prop('title', $config['title'] ?? '规格设置');
+            $element->prop('specs', $config['specs'] ?? []);
         } else {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field']);
         }

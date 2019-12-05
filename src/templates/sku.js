@@ -34,6 +34,7 @@ Vue.component('sku', {
     props: [
         'title',
         'value',
+        'specs'
     ],
     data: function () {
         return {
@@ -69,26 +70,27 @@ Vue.component('sku', {
         this.createData()
     },
     methods: {
-// 创建模拟数据
+        // 创建模拟数据
         createData: function () {
-            const arr = ['颜色', '尺寸']
-            const arr2 = ['黑色 白色 蓝色', 's m xl']
-            for (let i = 0; i < 2; i++) {
-// 添加数据
-                this.addSpec()
-// 数据
-                this.sku.specification[i].name = arr[i]
-                this.sku.addValues[i] = arr2[i]
-// 缓存按钮键值
-                this.sku.cacheSpecification[i].status = false
-                this.sku.cacheSpecification[i].name = arr[i]
-// 构建
-                this.addSpecTag(i)
+            if(!specs) {
+                return false
             }
+            let _this = this
+            specs.map(function (item, i) {
+                // 添加数据
+                this.addSpec()
+                // 数据
+                this.sku.specification[i].name = item.name
+                this.sku.addValues[i] = item.value
+                // 缓存按钮键值
+                this.sku.cacheSpecification[i].status = false
+                this.sku.cacheSpecification[i].name = item.value
+                // 构建
+                this.addSpecTag(i)
+            })
         },
-// 添加规格项目
+        // 添加规格项目
         addSpec: function () {
-            if (this.sku.specification.length < 5) {
                 this.sku.cacheSpecification.push({
                     status: true,
                     name: ''
@@ -97,7 +99,6 @@ Vue.component('sku', {
                     name: '',
                     value: []
                 })
-            }
         },
 // 修改状态
         updateSpec: function (index) {
