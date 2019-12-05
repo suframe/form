@@ -72,11 +72,11 @@ Vue.component('sku', {
     methods: {
         // 创建模拟数据
         createData: function () {
-            if(!specs) {
+            if(!this.specs) {
                 return false
             }
             let _this = this
-            specs.map(function (item, i) {
+            this.specs.map(function (item, i) {
                 // 添加数据
                 this.addSpec()
                 // 数据
