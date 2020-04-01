@@ -173,7 +173,11 @@ class Form
             $element->prop('title', $config['title'] ?? '规格设置');
             $element->prop('specs', $config['specs'] ?? []);
         } else {
-            $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value'] ?? null);
+            if(isset($config['value'])) {
+                $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value']);
+            } else {
+                $element = Elm::$type($config['field'], $config['title'] ?? $config['field']);
+            }
         }
         if (isset($config['callback'])) {
             $element = $config['callback']($element);
