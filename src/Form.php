@@ -191,18 +191,22 @@ class Form
             $element->col($col);
         }
         if (isset($config['options'])) {
-            $element->options(function () use ($config) {
-                $options = [];
-                foreach ($config['options'] as $k => $v) {
-                    $option = Elm::option($v['value'], $v['label']);
-                    if(isset($v['disabled'])){
-                        $option->disabled($v['disabled']);
+            if ($type === 'cascader') {
+                $element->options($config['options']);
+            } else {
+                $element->options(function () use ($config) {
+                    $options = [];
+                    foreach ($config['options'] as $k => $v) {
+                        $option = Elm::option($v['value'], $v['label']);
+                        if(isset($v['disabled'])){
+                            $option->disabled($v['disabled']);
+                        }
+                        $options[] = $option;
                     }
-                    $options[] = $option;
-                }
-                //等同于 [['value'=>0,'label'=>'好用'],['value'=>1,'label'=>'高效']]
-                return $options;
-            });
+                    //等同于 [['value'=>0,'label'=>'好用'],['value'=>1,'label'=>'高效']]
+                    return $options;
+                });
+            }
         }
         if (isset($config['props'])) {
             $element->props($config['props']);
