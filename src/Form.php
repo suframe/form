@@ -70,6 +70,20 @@ class Form
     }
 
     /**
+     * 追加组件
+     *
+     * @param $component
+     * @return \FormBuilder\Form
+     * @throws FormBuilderException
+     */
+    public function appendCustom($component)
+    {
+        $this->customComponents[] = $component;
+        $this->append($component);
+        return $this;
+    }
+
+    /**
      * @param array $rule
      * @return \FormBuilder\Form
      * @throws FormBuilderException
