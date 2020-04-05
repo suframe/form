@@ -35,6 +35,8 @@ Vue.component('sku', {
         'title',
         'value',
         'specs',
+        'customSpec',
+        'specData',
         'defaultProductNo',// 默认商品编号
     ],
     data: function () {
@@ -57,7 +59,7 @@ Vue.component('sku', {
         // 所有sku的id
         stockSpecArr: function () {
             var rs = this.sku.childProductArray.map(function (item) {
-                return item.childProductSpec
+                return item.spec
             })
             this.$emit('input', this.sku);
             return rs;
@@ -87,6 +89,9 @@ Vue.component('sku', {
                 _this.cacheSpecification[i].name = item.name
                 // 构建
                 _this.addSpecTag(i)
+            })
+            this.sku.childProductArray.map(function (item, i) {
+                _this.sku.childProductArray[i] = _this.specData[i]
             })
         },
         // 添加规格项目
@@ -240,16 +245,16 @@ Vue.component('sku', {
          */
         changeStock: function (option, index, stockCopy) {
             let childProduct = {
-                childProductId: 0,
-                childProductSpec: this.getChildProductSpec(index),
-                childProductNo: this.defaultProductNo + index,
-                childProductStock: 0,
-                childProductPrice: 0,
-                childProductCost: 0,
-                isUse: true
+                id: 0,
+                spec: this.getspec(index),
+                product_no: this.defaultProductNo + index,
+                stock: 0,
+                price: 0,
+                price_origin: 0,
+                enable: 1
             }
             let _this = this
-            const spec = childProduct.childProductSpec
+            const spec = childProduct.spec
             if (option === 'add') {
 // 如果此id不存在，说明为新增属性，则向 childProductArray 中添加一条数据
                 if (this.stockSpecArr.findIndex(function (item) {
@@ -261,7 +266,7 @@ Vue.component('sku', {
 // 因为是删除操作，理论上所有数据都能从stockCopy中获取到
                 let origin = ''
                 stockCopy.forEach(function (item) {
-                    if (objEquals(spec, item.childProductSpec)) {
+                    if (objEquals(spec, item.spec)) {
                         origin = item
                         return false
                     }
@@ -269,8 +274,8 @@ Vue.component('sku', {
                 this.sku.childProductArray.push(origin || childProduct)
             }
         },
-// 获取childProductArray的childProductSpec属性
-        getChildProductSpec: function (index) {
+// 获取childProductArray的spec属性
+        getspec: function (index) {
             let obj = {}
             let _this = this
             this.sku.specification.forEach(function (item, specIndex) {
@@ -279,22 +284,13 @@ Vue.component('sku', {
             return obj
         },
 // 监听规格启用操作
-        handleUserChange: function (index, value) {
-// 启用规格时，生成不重复的商品编号；关闭规格时，清空商品编号
-            if (value) {
-                let No = this.makeProductNoNotRepet(index)
-                this.$set(this.sku.childProductArray[index], 'childProductNo', No)
-            } else {
-                this.$set(this.sku.childProductArray[index], 'childProductNo', '')
-            }
-        },
 // 监听商品编号的blur事件
         handleNo: function (index) {
 // 1.当用户输入完商品编号时，判断是否重复，如有重复，则提示客户并自动修改为不重复的商品编号
-            const value = this.sku.childProductArray[index].childProductNo
+            const value = this.sku.childProductArray[index].product_no
             let isRepet
             this.sku.childProductArray.forEach(function (item, i) {
-                if (item.childProductNo === value && i !== index) {
+                if (item.product_no === value && i !== index) {
                     isRepet = true
                 }
             })
@@ -303,7 +299,7 @@ Vue.component('sku', {
                     type: 'warning',
                     message: '不允许输入重复的商品编号'
                 })
-                this.$set(this.sku.childProductArray[index], 'childProductNo', this.makeProductNoNotRepet(index))
+                this.$set(this.sku.childProductArray[index], 'product_no', this.makeProductNoNotRepet(index))
             }
         },
 // 生成不重复的商品编号
@@ -321,7 +317,7 @@ Vue.component('sku', {
 // 商品编号判重
         isProductNoRepet: function (No) {
             const result = this.sku.childProductArray.findIndex(function (item) {
-                return item.childProductNo === No
+                return item.product_no === No
             })
             return result > -1
         },
@@ -341,7 +337,7 @@ Vue.component('sku', {
             }
             let _this = this
             this.sku.childProductArray.forEach(function (item) {
-                if (item.isUse) {
+                if (item.enable === 1) {
                     item[_this.currentType] = _this.batchValue
                 }
             })
@@ -356,7 +352,7 @@ Vue.component('sku', {
     },
     template: `
 <div class="vue-sku">
-    <el-card class="box-card">
+    <el-card class="box-card" v-if="customSpec">
         <div slot="header" class="clearfix">
             <span>{{title ? title : '规格设置'}}</span>
            <el-button size="small" type="primary" :disabled="sku.specification.length >= 5" @click="addSpec">
@@ -378,21 +374,17 @@ Vue.component('sku', {
                 <el-tag v-for="(tag, j) in item.value" :key="j" closable @close="delSpecTag(index, j)">{{ tag
                     }}
                 </el-tag>
-                <el-input size="small" style="width:200px;" v-model="addValues[index]" placeholder="多个产品属性以空格隔开"
+                <el-input size="small" style="width:200px; vertical-align: middle" v-model="addValues[index]" placeholder="多个产品属性以空格隔开"
                           @keyup.native.enter="addSpecTag(index)">
                     <el-button slot="append" icon="el-icon-check" type="primary"
                                @click="addSpecTag(index)"></el-button>
                 </el-input>
                 <i class="icon el-icon-circle-close spec-deleted" @click="delSpec(index)"></i>
-                <el-divider></el-divider>
             </div>
         </section>
     </el-card>
 
     <el-card>
-        <div slot="header" class="clearfix">
-            <span>规格表格</span>
-        </div>
         <table class="el-table vue-sku-table" cellspacing="0" cellpadding="0">
             <thead>
             <tr>
@@ -424,8 +416,8 @@ Vue.component('sku', {
                     <el-input
                             size="small"
                             type="text"
-                            :disabled="!sku.childProductArray[index].isUse"
-                            v-model="sku.childProductArray[index].childProductNo"
+                            :disabled="sku.childProductArray[index].enable !== 1"
+                            v-model="sku.childProductArray[index].product_no"
                             @blur="handleNo(index)"
                             placeholder="输入商品规格编号">
                     </el-input>
@@ -434,41 +426,40 @@ Vue.component('sku', {
                     <el-input
                             size="small"
                             type="text"
-                            v-model.number="sku.childProductArray[index].childProductCost"
-                            placeholder="输入成本价"
-                            :disabled="!sku.childProductArray[index].isUse">
+                            v-model.number="sku.childProductArray[index].price_origin"
+                            placeholder="输入市场价"
+                            :disabled="sku.childProductArray[index].enable !== 1">
                     </el-input>
                 </td>
                 <td>
                     <el-input
                             size="small"
                             type="text"
-                            v-model.number="sku.childProductArray[index].childProductStock"
+                            v-model.number="sku.childProductArray[index].stock"
                             placeholder="输入库存"
-                            :disabled="!sku.childProductArray[index].isUse">
+                            :disabled="sku.childProductArray[index].enable !== 1">
                     </el-input>
                 </td>
                 <td>
                     <el-input
                             size="small"
                             type="text"
-                            v-model.number="sku.childProductArray[index].childProductPrice"
+                            v-model.number="sku.childProductArray[index].price"
                             placeholder="输入销售价"
-                            :disabled="!sku.childProductArray[index].isUse">
+                            :disabled="sku.childProductArray[index].enable !== 1">
                     </el-input>
                 </td>
                 <td>
-                    <el-switch v-model="sku.childProductArray[index].isUse"
-                               @change="(val) => {handleUserChange(index, val)}"></el-switch>
+                    <el-switch v-model="sku.childProductArray[index].enable" :active-value=1 :inactive-value=2></el-switch>
                 </td>
             </tr>
             <tr>
                 <td colspan="8" class="wh-foot">
                     <span class="label">批量设置：</span>
                     <template v-if="isSetListShow">
-                        <el-button @click="openBatch('childProductCost')" size="mini">成本价</el-button>
-                        <el-button @click="openBatch('childProductStock')" size="mini">库存</el-button>
-                        <el-button @click="openBatch('childProductPrice')" size="mini">销售价</el-button>
+                        <el-button @click="openBatch('price_origin')" size="mini">市场价</el-button>
+                        <el-button @click="openBatch('stock')" size="mini">库存</el-button>
+                        <el-button @click="openBatch('price')" size="mini">销售价</el-button>
                     </template>
                     <template v-else>
                         <el-input size="mini" style="width:200px;" v-model.number="batchValue"

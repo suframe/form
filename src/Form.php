@@ -76,9 +76,9 @@ class Form
      * @return \FormBuilder\Form
      * @throws FormBuilderException
      */
-    public function appendCustom($component)
+    public function appendCustom($component, $type = null)
     {
-        $this->customComponents[] = $component;
+        $this->customComponents[] = $type;
         $this->append($component);
         return $this;
     }
