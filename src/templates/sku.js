@@ -36,7 +36,7 @@ Vue.component('sku', {
         'value',
         'specs',
         'customSpec',
-        'specData',
+        'value',
         'defaultProductNo',// 默认商品编号
     ],
     data: function () {
@@ -91,7 +91,7 @@ Vue.component('sku', {
                 _this.addSpecTag(i)
             })
             this.sku.childProductArray.map(function (item, i) {
-                _this.sku.childProductArray[i] = _this.specData[i]
+                _this.sku.childProductArray[i] = _this.value[i]
             })
         },
         // 添加规格项目

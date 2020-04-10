@@ -58,12 +58,14 @@ class Form
     public function customComponentView()
     {
         $html = '';
+
         foreach ($this->customComponents as $customComponent) {
             $file = __DIR__ . '/templates/' . $customComponent . '.js';
+
             if(!file_exists($file)){
                 return false;
             }
-            $tmp = include $file;
+            $tmp = file_get_contents($file);
             $html .= "\n" . $tmp;
         }
         return $html;
@@ -184,8 +186,21 @@ class Form
             $this->customComponents[$type] = $type;
             $element = new CustomComponent($type);
             $element->field($config['field']);
+            if(isset($config['title'])){
+                $element->title($config['title']);
+            }
             $element->prop('title', $config['title'] ?? '规格设置');
-            $element->prop('specs', $config['specs'] ?? []);
+            $element->value('specs', $config['specs'] ?? []);
+        } elseif ($type === 'editor') {
+            $type = 'editor';
+            $this->customComponents[$type] = $type;
+            $element = new CustomComponent($type);
+            $element->field($config['field']);
+            if(isset($config['title'])){
+                $element->title($config['title']);
+            }
+            $element->prop('action', $config['action'] ?? '');
+            $element->prop('preview', $config['preview'] ?? false);
         } else {
             if(isset($config['value'])) {
                 $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value']);
