@@ -46,6 +46,8 @@ suframe 创建vue表单，基于https://github.com/xaboy/form-create再次封装
 * tree
 * frame
 
+* editor (ckeditor)
+
 
 ## 快速测试
 ```
