@@ -133,7 +133,12 @@ Vue.component('editor', {
             }
         }
     },
-    computed: {},
+    watch: {
+        value(newName, oldName) {
+            this.$emit('input', newName);
+            console.log(newName)
+        }
+    },
     created: function () {
 
     },
@@ -144,6 +149,7 @@ Vue.component('editor', {
             }
         },
         onReady(editor) {
+            let _this = this
             // Insert the toolbar before the editable area.
             editor.ui.getEditableElement().parentElement.insertBefore(
                 editor.ui.view.toolbar.element,
