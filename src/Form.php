@@ -1,5 +1,7 @@
 <?php
+
 namespace suframe\form;
+
 use FormBuilder\Driver\CustomComponent;
 use FormBuilder\Exception\FormBuilderException;
 use FormBuilder\Factory\Elm;
@@ -62,7 +64,7 @@ class Form
         foreach ($this->customComponents as $customComponent) {
             $file = __DIR__ . '/templates/' . $customComponent . '.js';
 
-            if(!file_exists($file)){
+            if (!file_exists($file)) {
                 return false;
             }
             $tmp = file_get_contents($file);
@@ -122,7 +124,23 @@ class Form
     public function append($component)
     {
         $key = $component->getField();
-        $value = $this->data[$key] ?? null;
+
+        if (strpos($key, '.') !== false) {
+            $newkey = '';
+            $valueKey = $key = explode('.', $key);
+            $newkey = '';
+            $value = $this->data;
+            foreach ($key as $k => $item) {
+                if($k == 0) {
+                    $newkey .= $item;
+                } else {
+                    $newkey .= "['{$item}']";
+                }
+                $value = $value[$item] ?? null;
+            }
+        } else {
+            $value = $this->data[$key] ?? null;
+        }
         if ($value) {
             $component->value($value);
         }
@@ -147,10 +165,10 @@ class Form
                 continue;
             }
             $methodName = $method->getName();
-            if($exclude && in_array($methodName, $exclude)){
+            if ($exclude && in_array($methodName, $exclude)) {
                 continue;
             }
-            if($include && !in_array($methodName, $include)){
+            if ($include && !in_array($methodName, $include)) {
                 continue;
             }
             $methodName = lcfirst($methodName);
@@ -167,6 +185,7 @@ class Form
     protected $typeMap = [
         'switch' => 'switches',
     ];
+
     protected function typeMap($type)
     {
         return $this->typeMap[$type] ?? $type;
@@ -177,7 +196,7 @@ class Form
         $type = $config['type'] ?? 'input';
         $type = $this->typeMap($type);
         /** @var  $element */
-        if(strpos($type, 'upload') === 0) {
+        if (strpos($type, 'upload') === 0) {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['action'] ?? '');
         } elseif ($type === 'number') {
             $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value'] ?? 0);
@@ -186,7 +205,7 @@ class Form
             $this->customComponents[$type] = $type;
             $element = new CustomComponent($type);
             $element->field($config['field']);
-            if(isset($config['title'])){
+            if (isset($config['title'])) {
                 $element->title($config['title']);
             }
             $element->prop('title', $config['title'] ?? '规格设置');
@@ -196,13 +215,13 @@ class Form
             $this->customComponents[$type] = $type;
             $element = new CustomComponent($type);
             $element->field($config['field']);
-            if(isset($config['title'])){
+            if (isset($config['title'])) {
                 $element->title($config['title']);
             }
             $element->prop('action', $config['action'] ?? '');
             $element->prop('preview', $config['preview'] ?? false);
         } else {
-            if(isset($config['value'])) {
+            if (isset($config['value'])) {
                 $element = Elm::$type($config['field'], $config['title'] ?? $config['field'], $config['value']);
             } else {
                 $element = Elm::$type($config['field'], $config['title'] ?? $config['field']);
@@ -227,7 +246,7 @@ class Form
                     $options = [];
                     foreach ($config['options'] as $k => $v) {
                         $option = Elm::option($v['value'], $v['label']);
-                        if(isset($v['disabled'])){
+                        if (isset($v['disabled'])) {
                             $option->disabled($v['disabled']);
                         }
                         $options[] = $option;
