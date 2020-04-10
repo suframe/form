@@ -117,7 +117,7 @@ class Form
     /**
      * 追加组件
      *
-     * @param $component
+     * @param CustomComponent $component
      * @return \FormBuilder\Form
      * @throws FormBuilderException
      */
@@ -128,7 +128,6 @@ class Form
         if (strpos($key, '.') !== false) {
             $newkey = '';
             $valueKey = $key = explode('.', $key);
-            $newkey = '';
             $value = $this->data;
             foreach ($key as $k => $item) {
                 if($k == 0) {
@@ -138,6 +137,7 @@ class Form
                 }
                 $value = $value[$item] ?? null;
             }
+            $component->field($newkey);
         } else {
             $value = $this->data[$key] ?? null;
         }
