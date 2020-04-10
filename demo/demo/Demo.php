@@ -24,6 +24,24 @@ class Demo
         ];
     }
 
+    public function image()
+    {
+        return [
+            'type' => 'uploadImage',
+            'action' => '图片上传地址',
+            'title' => '封面图片',
+            'col' => ['span' => 12],
+            'field' => 'image',
+            /*'validate' =>
+                [
+                    [
+                        'required' => true,
+                        'message' => '不能为空',
+                    ],
+                ],*/
+        ];
+    }
+
     public function number()
     {
         return [
@@ -97,6 +115,18 @@ class Demo
                 'format' => "yyyy-MM-dd HH:mm:ss",
                 'placeholder' => '请选择活动日期',
             ],
+        ];
+    }
+
+
+    public function content()
+    {
+        return [
+            'type' => 'editor',
+            'title' => '详细内容',
+            'field' => 'content',
+            'action' => '', //图片上传地址
+            'preview' => true
         ];
     }
 
