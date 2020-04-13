@@ -133,7 +133,7 @@ class Form
                 if($k == 0) {
                     $newkey .= $item;
                 } else {
-                    $newkey .= "['{$item}']";
+                    $newkey .= "[{$item}]";
                 }
                 $value = $value[$item] ?? null;
             }
