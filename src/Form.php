@@ -126,18 +126,18 @@ class Form
         $key = $component->getField();
 
         if (strpos($key, '.') !== false) {
-            $newkey = '';
-            $valueKey = $key = explode('.', $key);
+            $newKey = '';
+            $key = explode('.', $key);
             $value = $this->data;
             foreach ($key as $k => $item) {
                 if($k == 0) {
-                    $newkey .= $item;
+                    $newKey .= $item;
                 } else {
-                    $newkey .= "[{$item}]";
+                    $newKey .= "[{$item}]";
                 }
                 $value = $value[$item] ?? null;
             }
-            $component->field($newkey);
+            $component->field($newKey);
         } else {
             $value = $this->data[$key] ?? null;
         }
