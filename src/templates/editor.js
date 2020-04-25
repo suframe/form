@@ -1,7 +1,8 @@
 class MyUploadAdapter {
-    constructor(loader) {
+    constructor(loader, action) {
         // The file loader instance to use during the upload.
         this.loader = loader;
+        this.action = action;
     }
 
     // Starts the upload process.
@@ -29,7 +30,7 @@ class MyUploadAdapter {
         // integration to choose the right communication channel. This example uses
         // a POST request with JSON as a data structure but your configuration
         // could be different.
-        xhr.open('POST', '/thinkadmin/main/upload', true);
+        xhr.open('POST', this.action ? this.action : '/thinkadmin/main/upload', true);
         xhr.responseType = 'json';
     }
 
@@ -93,15 +94,16 @@ class MyUploadAdapter {
     }
 }
 
-function MyCustomUploadAdapterPlugin(editor) {
+function MyCustomUploadAdapterPlugin(editor, action) {
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-        return new MyUploadAdapter(loader);
+        return new MyUploadAdapter(loader, action);
     };
 }
 
 Vue.component('editor', {
     props: [
         'value',
+        'action',
         'preview'
     ],
     data: function () {
@@ -155,7 +157,7 @@ Vue.component('editor', {
                 editor.ui.view.toolbar.element,
                 editor.ui.getEditableElement()
             );
-            MyCustomUploadAdapterPlugin(editor)
+            MyCustomUploadAdapterPlugin(editor, this.action)
         }
     },
     template: `
