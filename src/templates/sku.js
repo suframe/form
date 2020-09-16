@@ -90,8 +90,13 @@ Vue.component('sku', {
                 // 构建
                 _this.addSpecTag(i)
             })
+
             this.sku.childProductArray.map(function (item, i) {
-                _this.sku.childProductArray[i] = _this.value[i]
+                _this.value.map(function (v, k) {
+                    if(JSON.stringify(v.spec) === JSON.stringify(item.spec)) {
+                        _this.sku.childProductArray[i] = v
+                    }
+                })
             })
         },
         // 添加规格项目
