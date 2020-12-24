@@ -18,6 +18,23 @@ class Form
      */
     protected $f;
     protected $data = [];
+    protected $goBack = true;
+
+    /**
+     * @return bool
+     */
+    public function isGoBack(): bool
+    {
+        return $this->goBack;
+    }
+
+    /**
+     * @param bool $goBack
+     */
+    public function setGoBack(bool $goBack): void
+    {
+        $this->goBack = $goBack;
+    }
 
     /**
      * 创建element表单
